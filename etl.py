@@ -77,25 +77,23 @@ def process_log_file(file):
         columns = ['user_id', 'first_name', 'last_name', 'gender', 'level']  # Like postgres table
         insert_in_table('users', data_to_insert(columns, values))
 
-        # get song and artists ids
+        # Release 1: get song and artists ids --- Release 2: get song_id
         columns = ['song', 'artist']
         values = row[columns].values.flatten().tolist()
         ids = get_song_artist_ids(values)
 
-        columns = ['userId', 'level', 'sessionId', 'location', 'userAgent']  # Like json file
+        columns = ['userId', 'sessionId', 'location', 'userAgent']  # Like json file
         values = row[columns].values.flatten().tolist()
 
         # columns like psql table
-        columns = ['start_time', 'user_id', 'level', 'song_id', 'artist_id', 'session_id', 'location', 'user_agent']
+        columns = ['start_time', 'user_id', 'song_id', 'session_id', 'location', 'user_agent']
 
         # values adapt to columns like psql table
         values.insert(0, date.timestamp() * 1000)
         if ids is not None:
-            values.insert(3, ids[0])  # Like psql table
-            values.insert(4, ids[1])  # Like psql table
+            values.insert(2, ids[0])  # Like psql table
         else:
-            values.insert(3, 'NULL')
-            values.insert(4, 'NULL')
+            values.insert(2, 'NULL')
 
         # insert songplay records
         insert_in_table('songplays', data_to_insert(columns, values))

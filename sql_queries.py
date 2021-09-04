@@ -43,9 +43,7 @@ def songplay_table_create(con):
         'songplay_id SERIAL PRIMARY KEY NOT NULL',
         'start_time bigint NOT NULL',
         'user_id varchar(100) NOT NULL',
-        'level varchar(10) NOT NULL',
         'song_id varchar(100)',
-        'artist_id varchar(100)',
         'session_id int NOT NULL',
         'location varchar(100)',
         'user_agent varchar(256)'
@@ -128,7 +126,12 @@ def insert_query(**kwargs):
 # FIND SONGS
 def find_songs_query(search):
     title, artist = search
-    query = sql.SQL("""SELECT song_id, sg.artist_id FROM songs sg INNER JOIN artists art ON sg.artist_id = art.artist_id
+    """
+    In release 1 query = sql.SQL(
+    '''SELECT song_id, sg.artist_id FROM songs sg INNER JOIN artists art ON sg.artist_id = art.artist_id
+            WHERE title = {} AND artist_name = {}''').......
+    """
+    query = sql.SQL("""SELECT song_id FROM songs sg INNER JOIN artists art ON sg.artist_id = art.artist_id
             WHERE title = {} AND artist_name = {}""").format(
         sql.Literal(title),
         sql.Literal(artist))
